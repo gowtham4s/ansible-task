@@ -27,7 +27,6 @@ pipeline {
 
         stage('Ansible Deployment') {
             steps {
-                #dir('ansible-task') { // move into the ansible-task folder
                     script {
                         ansiblePlaybook(
                             becomeUser: 'ec2-user',
@@ -47,7 +46,6 @@ pipeline {
                             playbook: 'ubuntu-playbook.yml'
                         )
                     }
-                }
             }
         }
 
