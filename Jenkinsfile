@@ -30,36 +30,26 @@ pipeline {
         }
 
         stage('Run Ansible - Frontend') {
-            steps {
-                ansiblePlaybook(
-                    credentialsId: 'jenkins-key',
-                    disableHostKeyChecking: true,
-                    installation: 'ansible',
-                    inventory: 'inventory.yaml',
-                    playbook: 'amazon-playbook.yml',
-                    become: true,                    // recommended for Nginx tasks
-                    extraVars: [
-                        ansible_user: "ec2-user"
-                    ]
-                )
-            }
-        }
+    ansiblePlaybook(
+        playbook: 'amazon-playbook.yml',
+        inventory: 'inventory.yaml',
+        credentialsId: 'jenkins-key',
+        extras: '-u ec2-user',
+        become: true,
+        becomeUser: 'root'
+    )
+}
 
         stage('Run Ansible - Backend') {
-            steps {
-                ansiblePlaybook(
-                    credentialsId: 'jenkins-key',
-                    disableHostKeyChecking: true,
-                    installation: 'ansible',
-                    inventory: 'inventory.yaml',
-                    playbook: 'ubuntu-playbook.yml',
-                    become: true,                     // REQUIRED
-                    extraVars: [
-                        ansible_user: "ubuntu"
-                    ]
-                )
-            }
-        }
+    ansiblePlaybook(
+        playbook: 'ubuntu-playbook.yml',
+        inventory: 'inventory.yaml',
+        credentialsId: 'jenkins-key',
+        extras: '-u ubuntu',
+        become: true,
+        becomeUser: 'root'
+    )
+}
 
         stage('Post-checks') {
             steps {
