@@ -72,7 +72,8 @@ data "aws_subnet" "selected" {
 # Backend - Ubuntu
 # ---------------------------
 resource "aws_instance" "backend" {
-  ami                         = "ami-0ecb62995f68bb549"  # adjust if needed
+  ami                         = "ami-0ecb62995f68bb549"  # adjust if needed 
+
   instance_type               = "t3.micro"
   key_name                    = var.key_name
   subnet_id                   = var.subnet_id
