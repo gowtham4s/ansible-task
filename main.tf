@@ -2,15 +2,15 @@ provider "aws" {
   region = "us-east-1"
 }
 
-# ---------- VARIABLES ----------
+# ---------- variables ----------
 variable "key_name" {
   type    = string
-  default = "jenkins"   # your AWS key pair name
+  default = "jenkins"
 }
 
 variable "subnet_id" {
   type    = string
-  default = "subnet-0398cec97156f1f60"  # your subnet
+  default = "subnet-0398cec97156f1f60"
 }
 
 variable "jenkins_allowed_cidr" {
@@ -18,7 +18,16 @@ variable "jenkins_allowed_cidr" {
   default = "0.0.0.0/0"
 }
 
-# ---------- SECURITY GROUP ----------
+# ---------------------------
+# Fetch Subnet Details
+# ---------------------------
+data "aws_subnet" "selected" {
+  id = var.subnet_id
+}
+
+# ---------------------------
+# Security Group
+# ---------------------------
 resource "aws_security_group" "app_sg" {
   name        = "ansible-app-sg"
   description = "Allow SSH, HTTP, Netdata"
@@ -60,14 +69,19 @@ resource "aws_security_group" "app_sg" {
   }
 }
 
-# ---------- FETCH SUBNET INFO ----------
-data "aws_subnet" "selected" {
-  id = var.subnet_id
-}
-
-# ---------- BACKEND (UBUNTU) ----------
+# ---------------------------
+# Backend (Ubuntu)
+# ---------------------------
 resource "aws_instance" "backend" {
-  ami                         = "ami-0ecb62995f68bb549"    # Ubuntu 22.04 LTS
+  ami                         = "ami-0ecb62995f68bb549"
   instance_type               = "t3.micro"
   key_name                    = var.key_name
-  subnet_id                   = var.subnet_
+  subnet_id                   = var.subnet_id
+  vpc_security_group_ids      = [aws_security_group.app_sg.id]
+  associate_public_ip_address = true
+
+  tags = {
+    Name = "u21.local"
+  }
+
+  user_data = <<-EOF
