@@ -5,7 +5,7 @@ provider "aws" {
 # ---------- variables (optional) ----------
 variable "key_name" {
   type    = string
-  default = "jenkins"
+  default = "my-key"
 }
 
 variable "subnet_id" {
