@@ -15,7 +15,7 @@ pipeline {
 
         stage('Terraform Init & Apply') {
             steps {
-                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-creds']]) {
+                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-credential']]) {
                     sh '''
                         terraform init -input=false
                         terraform validate
