@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        TF_VAR_key_name = 'jenkins'
+        TF_VAR_key_name = 'aws_challenges'
     }
 
     stages {
@@ -37,7 +37,7 @@ pipeline {
                 ansiblePlaybook(
                     playbook: 'amazon-playbook.yml',
                     inventory: 'inventory.yaml',
-                    credentialsId: 'jenkins-key',
+                    credentialsId: 'aws_credential',
                     disableHostKeyChecking: true,
                     installation: 'ansible',
                     become: true,
@@ -53,7 +53,7 @@ pipeline {
                 ansiblePlaybook(
                     playbook: 'ubuntu-playbook.yml',
                     inventory: 'inventory.yaml',
-                    credentialsId: 'jenkins-key',
+                    credentialsId: 'aws_credential',
                     disableHostKeyChecking: true,
                     installation: 'ansible',
                     become: true,
