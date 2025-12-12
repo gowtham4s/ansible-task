@@ -17,6 +17,18 @@ variable "jenkins_allowed_cidr" {
   default = "0.0.0.0/0"
 }
 
+# ---------------------------
+# Keypair (existing key in AWS) - import this into TF state
+# ---------------------------
+resource "aws_key_pair" "aws_challenges" {
+  # We intentionally only declare the key_name so we can import the existing keypair
+  key_name = var.key_name
+
+  # optional: if you later want Terraform to manage the public key content,
+  # uncomment the next line and ensure aws_challenges.pub is available on the Jenkins agent.
+  # public_key = file("${path.module}/aws_challenges.pub")
+}
+
 # Fetch VPC ID using subnet
 data "aws_subnet" "selected" {
   id = var.subnet_id
